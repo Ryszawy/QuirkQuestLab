@@ -1,26 +1,18 @@
 package User
 
-import com.google.gson.Gson
+
 import io.restassured.RestAssured
-import io.restassured.builder.RequestSpecBuilder
 import io.restassured.http.ContentType
 import model.UserRequest
 import model.UserResponse
 import model.UsersLoginBody
-import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static org.hamcrest.Matchers.is
 import static utils.UserAuthenticatorUtils.*
 
 class UserSpec extends Specification {
-    static final Gson gson = new Gson()
-
-    @Shared
-    def requestSpec =
-            new RequestSpecBuilder()
-                    .setBaseUri("https://api.practicesoftwaretesting.com/users")
-                    .build()
 
     @Unroll
     def "should provide user token for #email"(String email, String password) {
@@ -36,7 +28,7 @@ class UserSpec extends Specification {
         when: "post login"
             def response = request.post("/login")
 
-        then: "should 200 okay, response matching expected"
+        then: "should 200 okay"
             response.then()
                     .log().all()
                     .statusCode(200)
@@ -47,7 +39,7 @@ class UserSpec extends Specification {
             "customer2@practicesoftwaretesting.com" | "welcome01"
     }
 
-    def "should return 401 when credentials are invalid"() {
+    def "should not return token when credentials are invalid"() {
         given: "set up request"
             def requestBody = new UsersLoginBody()
             requestBody.setEmail(ADMIN_PASSWORD)
@@ -60,10 +52,45 @@ class UserSpec extends Specification {
         when: "post login"
             def response = request.post("/login")
 
-        then: "should 401"
+        then: "should 401 - unauthorized"
             response.then()
                     .log().all()
                     .statusCode(401)
+    }
+
+    def "should logout user"() {
+        given: "set up request to check if is logged"
+            def loggedToken = getAuthorizationHeaderForAnyUser(USER2_EMAIL, USER2_PASSWORD)
+            def request = RestAssured.given(requestSpec)
+                    .contentType(ContentType.JSON)
+                    .header(loggedToken)
+                    .log().all()
+            def response = request.get("/me")
+            response.then()
+                    .log().all()
+                    .statusCode(200)
+        when: "should logout user"
+            request = RestAssured.given(requestSpec)
+                    .contentType(ContentType.JSON)
+                    .header(loggedToken)
+                    .log().all()
+            response = request.get("/logout")
+
+        then:
+            response.then()
+                    .log().all()
+                    .statusCode(200)
+        when: "try to check information using that user authentication header"
+            request = RestAssured.given(requestSpec)
+                    .contentType(ContentType.JSON)
+                    .header(loggedToken)
+                    .log().all()
+            response = request.get("/me")
+        then: "should 401 - unauthorized"
+            response.then()
+                    .log().all()
+                    .statusCode(401)
+                    .body("message", is("Unauthorized"))
     }
 
     @Unroll
@@ -108,7 +135,7 @@ class UserSpec extends Specification {
                     .log().all()
         when: "get response"
             def response = request.post("/register")
-        then: "should 201 okay"
+        then: "should 201 okay - user created"
             response.then()
                     .log().all()
                     .statusCode(201)
@@ -127,5 +154,92 @@ class UserSpec extends Specification {
                 assert getEmail() == newUser.getEmail()
                 assert !getId().isBlank()
             }
+    }
+
+    def 'should delete correctly user'() {
+        given: "create new user"
+            def newUserBody = anyUserRequestBody()
+            def authHeader = getAuthorizationHeaderForAnyUser(ADMIN_EMAIL, ADMIN_PASSWORD)
+            def newUserCreationResponse = createNewUser(newUserBody)
+        when: "delete created user"
+            def deleteUserRequest = RestAssured.given(requestSpec)
+                    .contentType(ContentType.JSON)
+                    .header(authHeader)
+                    .log().all()
+            def userId = newUserCreationResponse.getId()
+            def responseUserDeletion = deleteUserRequest.delete("/$userId")
+        then: 'should 204 - user deleted'
+            responseUserDeletion.then()
+                    .log().all()
+                    .statusCode(204)
+    }
+
+    def 'should not delete when user has no permission for that operation'() {
+        given: "create new user"
+            def newUser = anyUserRequestBody()
+            def userResponse = createNewUser(newUser)
+        when: "try to delete created user using not permitted authorization header"
+            def notPermittedAuthHeader = getAuthorizationHeaderForAnyUser(USER1_EMAIL, USER1_PASSWORD)
+            def deleteUserRequest = RestAssured.given(requestSpec)
+                    .contentType(ContentType.JSON)
+                    .header(notPermittedAuthHeader)
+                    .log().all()
+            def userId = userResponse.getId()
+            def responseUserDeletion = deleteUserRequest.delete("/$userId")
+        then: 'should 403 - Forbidden'
+            responseUserDeletion.then()
+                    .log().all()
+                    .statusCode(403)
+                    .body("message", is("Forbidden"))
+    }
+
+    def 'should update user information'() {
+        given: "create new user"
+            def userToUpdate = anyUserRequestBody()
+            def authHeader = getAuthorizationHeaderForAnyUser(ADMIN_EMAIL, ADMIN_PASSWORD)
+            def userToUpdateResponse = createNewUser(userToUpdate)
+            def userId = userToUpdateResponse.getId()
+        when: "update user information"
+            def updatedUser = anyUserRequestBody(userToUpdate.getEmail())
+            updatedUser.setFirstName("Test User")
+            updatedUser.setAddress("new Address")
+            def requestUpdate = RestAssured.given(requestSpec)
+                    .contentType(ContentType.JSON)
+                    .body(gson.toJson(updatedUser))
+                    .header(authHeader)
+                    .log().all()
+            def responseUpdate = requestUpdate.put("$userId")
+        then: "should 200 - updated"
+            responseUpdate.then()
+                    .log().all()
+                    .statusCode(200)
+        when: "get info about updated user"
+            def requestInfoForUpdatedUser = RestAssured.given(requestSpec)
+                    .contentType(ContentType.JSON)
+                    .header(authHeader)
+                    .log().all()
+            def responseInfoAboutUpdatedUser = requestInfoForUpdatedUser.get("/$userId")
+        then: "should 200 - with updated data"
+            responseInfoAboutUpdatedUser.then()
+                    .log().all()
+                    .statusCode(200)
+            def jsonBody = responseInfoAboutUpdatedUser.body().prettyPrint()
+            def updatedUserResponse = gson.fromJson(jsonBody, UserResponse.class)
+            with(updatedUserResponse) {
+                assert getFirstName() != userToUpdate.getFirstName()
+                assert getFirstName() == "Test User"
+                assert getLastName() == userToUpdate.getLastName()
+                assert getAddress() != userToUpdate.getAddress()
+                assert getAddress() == "new Address"
+                assert getCity() == userToUpdate.getCity()
+                assert getState() == userToUpdate.getState()
+                assert getCountry() == userToUpdate.getCountry()
+                assert getPostcode() == userToUpdate.getPostcode()
+                assert getPhone() == userToUpdate.getPhone()
+                assert getDob() == userToUpdate.getDob()
+                assert getEmail() == userToUpdate.getEmail()
+                assert !getId().isBlank()
+            }
+
     }
 }
