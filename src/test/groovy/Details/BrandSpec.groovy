@@ -138,6 +138,7 @@ class BrandSpec extends Specification {
 
     def "delete brand with selected and existing id while not logged in test "() {
         when: "send delete request"
+            ProductDetailsUtils.request.get(ProductDetailsUtils.logout)
             def addedResponse = addNewBrand()
             def response = ProductDetailsUtils.request.delete(ProductDetailsUtils.brands + "/"
                 + addedResponse.getId())

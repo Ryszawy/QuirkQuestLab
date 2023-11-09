@@ -42,8 +42,8 @@ class CategoriesSpec extends Specification {
                 .header(RequestUtils.contentType, RequestUtils.applicationJsonContentTypeWithCharset)
                 .log().all()
         def jsonBody = response.body().prettyPrint()
-        def CategoryResponse = (ArrayList<CategoryResponse>) gson.fromJson(jsonBody, List.class)
-        CategoryResponse.size() > 0
+        def categoryResponse = (ArrayList<CategoryResponse>) gson.fromJson(jsonBody, List.class)
+        categoryResponse.size() > 0
     }
 
     def "add new Category test"() {
@@ -134,6 +134,19 @@ class CategoriesSpec extends Specification {
                 .log().all()
     }
 
+
+    def "delete category with selected and existing id while not logged in test "() {
+        when: "send delete request"
+        ProductDetailsUtils.request.get(ProductDetailsUtils.logout)
+        def addedResponse = addNewCategory()
+        def response = ProductDetailsUtils.request.delete(ProductDetailsUtils.categories + "/"
+                + addedResponse.getId())
+        then: "should return 401 Unauthorized"
+        response.then()
+                .statusCode(HttpStatus.SC_UNAUTHORIZED)
+                .header(RequestUtils.contentType, RequestUtils.applicationJsonContentType)
+                .log().all()
+    }
 
 
     def "delete Category with selected and existing id while logged in as normal user test "() {
