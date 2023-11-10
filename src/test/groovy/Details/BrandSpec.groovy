@@ -145,6 +145,7 @@ class BrandSpec extends Specification {
         then: "should return 401 Unauthorized"
             response.then()
                 .statusCode(HttpStatus.SC_UNAUTHORIZED)
+                    .body("message", Matchers.equalTo(ProductDetailsUtils.unauthorized))
                 .header(RequestUtils.contentType, RequestUtils.applicationJsonContentType)
                 .log().all()
     }
@@ -160,6 +161,7 @@ class BrandSpec extends Specification {
         then: "should return 403 Forbidden"
             response.then()
                 .statusCode(HttpStatus.SC_FORBIDDEN)
+                 .body("message", Matchers.equalTo(ProductDetailsUtils.forbidden))
                 .header(RequestUtils.contentType, RequestUtils.applicationJsonContentType)
                 .log().all()
     }

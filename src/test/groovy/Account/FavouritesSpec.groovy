@@ -3,6 +3,7 @@ package Account
 import model.BrandResponse
 import model.FavoriteResponse
 import org.apache.http.HttpStatus
+import org.hamcrest.Matchers
 import spock.lang.Specification
 import utils.AccountUtils
 import utils.ProductDetailsUtils
@@ -29,4 +30,16 @@ class FavouritesSpec extends Specification {
         def favouriteResponse = (ArrayList<FavoriteResponse>) gson.fromJson(jsonBody, List.class)
         favouriteResponse.size() > 0
     }
+    def "retrieve favourites where not logged in test"() {
+        when: "send get to retrieve all favourite products"
+        ProductDetailsUtils.request.get(ProductDetailsUtils.logout)
+        def response = ProductDetailsUtils.request.get(AccountUtils.favourites)
+        then: "should return 401 Unauthorized"
+        response.then()
+                .statusCode(HttpStatus.SC_UNAUTHORIZED.intValue())
+                .body("message", Matchers.equalTo(ProductDetailsUtils.unauthorized))
+                .header(RequestUtils.contentType, RequestUtils.applicationJsonContentType)
+                .log().all()
+    }
+
 }
