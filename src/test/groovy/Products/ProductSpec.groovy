@@ -12,7 +12,7 @@ import static utils.UserAuthenticatorUtils.gson
 
 class ProductSpec extends Specification {
 
-    def "retrieve all products test"() {
+    def "should retrieve all products "() {
         when: "send get to retrieve all exist products"
         def response = ProductDetailsUtils.request.get(ProductDetailsUtils.products)
         then: "should return products"
@@ -26,7 +26,7 @@ class ProductSpec extends Specification {
         productResponse.size() > 0
     }
 
-    def "retrieve all products images test" () {
+    def "should retrieve all products images" () {
         when: "send get to retrieve all exist products"
         def response = ProductDetailsUtils.request.get(ProductDetailsUtils.images)
         then: "should return products"

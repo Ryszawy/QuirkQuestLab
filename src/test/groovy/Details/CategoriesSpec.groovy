@@ -33,7 +33,7 @@ class CategoriesSpec extends Specification {
         gson.fromJson(jsonBody, CategoryResponse.class)
     }
 
-    def "retrieve all categories test"() {
+    def "should retrieve all categories "() {
         when: "send get to retrieve all exist categories"
         def response = ProductDetailsUtils.request.get(ProductDetailsUtils.categories)
         then: "should return categories"
@@ -46,7 +46,7 @@ class CategoriesSpec extends Specification {
         categoryResponse.size() > 0
     }
 
-    def "add new Category test"() {
+    def "should add new Category "() {
         when: "send post to add new Category"
         def requestBody = new CategoryResponse()
         def name = UUID.randomUUID().toString()
@@ -71,7 +71,7 @@ class CategoriesSpec extends Specification {
         }
     }
 
-    def "get Category by existing ID test"() {
+    def "should get Category by existing ID "() {
         when: "send get to retrieve selected Category"
         def addedCategory = addNewCategory()
         def response = ProductDetailsUtils.request.get(ProductDetailsUtils.categories + "/"
@@ -90,7 +90,7 @@ class CategoriesSpec extends Specification {
         }
     }
 
-    def "get Category by non existing ID test"() {
+    def "should not get Category by non existing ID test"() {
         when: "send get to retrieve non existing Category"
         def response = ProductDetailsUtils.request.get(ProductDetailsUtils.categories + "/"
                 + "F")
@@ -101,7 +101,7 @@ class CategoriesSpec extends Specification {
                 .log().all()
     }
 
-    def "update Category with selected wrong ID test"() {
+    def "should not update Category with selected wrong ID"() {
         when: "send update for selected Category"
         def response = ProductDetailsUtils.request.put(ProductDetailsUtils.categories + "/"
                 + "F")
@@ -113,7 +113,7 @@ class CategoriesSpec extends Specification {
                 .log().all()
     }
 
-    def "update Category with selected ID test"() {
+    def "should update Category with selected ID"() {
         when: "send update for selected Category"
         def addedCategory = addNewCategory()
         def requestBody = new CategoryRequest()
@@ -135,7 +135,7 @@ class CategoriesSpec extends Specification {
     }
 
 
-    def "delete category with selected and existing id while not logged in test "() {
+    def "should not delete category with selected and existing id while not logged in "() {
         when: "send delete request"
         ProductDetailsUtils.request.get(ProductDetailsUtils.logout)
         def addedResponse = addNewCategory()
@@ -150,7 +150,7 @@ class CategoriesSpec extends Specification {
     }
 
 
-    def "delete Category with selected and existing id while logged in as normal user test "() {
+    def "should not delete category with selected and existing id while logged in as normal user "() {
         when: "send delete request"
         def addedResponse = addNewCategory()
         def response = ProductDetailsUtils.request.
@@ -167,7 +167,7 @@ class CategoriesSpec extends Specification {
     }
 
 
-    def "delete Category with selected and existing id while logged in as admin test"() {
+    def "should delete Category with selected and existing id while logged in as admin"() {
         when: "send delete request"
         def addedResponse = addNewCategory()
         def response = ProductDetailsUtils.request.

@@ -14,7 +14,7 @@ import static utils.UserAuthenticatorUtils.USER1_EMAIL
 import static utils.UserAuthenticatorUtils.USER1_PASSWORD
 
 class InvoicesSpec extends Specification {
-    def "retrieve invoices where not logged in test"() {
+    def "should not retrieve invoices where user not logged in"() {
         when: "send get to retrieve all invoice products"
         ProductDetailsUtils.request.get(ProductDetailsUtils.logout)
         def response = ProductDetailsUtils.request.get(AccountUtils.invoices)
@@ -25,7 +25,7 @@ class InvoicesSpec extends Specification {
                 .header(RequestUtils.contentType, RequestUtils.applicationJsonContentType)
                 .log().all()
     }
-    def "retrieve invoices where logged as user test"() {
+    def "should retrieve only related invoices where logged as user"() {
         when: "send get to retrieve all invoice products"
         def response = ProductDetailsUtils.request
                 .header(UserAuthenticatorUtils.getAuthorizationHeaderForAnyUser(
@@ -39,7 +39,7 @@ class InvoicesSpec extends Specification {
                 .log().all()
     }
 
-    def "retrieve invoices where logged as admin test"() {
+    def "should retrieve all invoices where logged as admin"() {
         when: "send get to retrieve all invoice products"
         def response = ProductDetailsUtils.request
                 .header(UserAuthenticatorUtils.getAuthorizationHeaderForAnyUser(

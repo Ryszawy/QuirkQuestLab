@@ -34,7 +34,7 @@ class BrandSpec extends Specification {
         gson.fromJson(jsonBody, BrandResponse.class)
     }
 
-    def "retrieve all brands test"() {
+    def "should retrieve all brands "() {
         when: "send get to retrieve all exist brands"
         def response = ProductDetailsUtils.request.get(ProductDetailsUtils.brands)
         then: "should return brands"
@@ -47,7 +47,7 @@ class BrandSpec extends Specification {
         brandResponse.size() > 0
     }
 
-    def "add new brand test"() {
+    def "should add new brand "() {
         when: "send post to add new brand"
         def requestBody = new BrandResponse()
         def name = UUID.randomUUID().toString()
@@ -72,7 +72,7 @@ class BrandSpec extends Specification {
         }
     }
 
-    def "get brand by existing ID test"() {
+    def "should get brand by existing ID "() {
         when: "send get to retrieve selected brand"
         def addedBrand = addNewBrand()
         def response = ProductDetailsUtils.request.get(ProductDetailsUtils.brands + "/"
@@ -91,7 +91,7 @@ class BrandSpec extends Specification {
         }
     }
 
-    def "get brand by non existing ID test"() {
+    def "should not get brand by non existing ID "() {
         when: "send get to retrieve non existing brand"
         def response = ProductDetailsUtils.request.get(ProductDetailsUtils.brands + "/"
                 + "F")
@@ -102,7 +102,7 @@ class BrandSpec extends Specification {
                 .log().all()
     }
 
-    def "update brand with selected wrong ID test"() {
+    def "should update brand with selected wrong ID "() {
         when: "send update for selected brand"
         def response = ProductDetailsUtils.request.put(ProductDetailsUtils.brands + "/"
                 + "F")
@@ -114,7 +114,7 @@ class BrandSpec extends Specification {
                 .log().all()
     }
 
-    def "update brand with selected ID test"() {
+    def "should update brand with selected ID"() {
         when: "send update for selected brand"
         def addedBrand = addNewBrand()
         def requestBody = new BrandRequest()
@@ -136,7 +136,7 @@ class BrandSpec extends Specification {
     }
 
 
-    def "delete brand with selected and existing id while not logged in test "() {
+    def "should delete brand with selected and existing id while not logged in "() {
         when: "send delete request"
             ProductDetailsUtils.request.get(ProductDetailsUtils.logout)
             def addedResponse = addNewBrand()
@@ -150,7 +150,7 @@ class BrandSpec extends Specification {
                 .log().all()
     }
 
-    def "delete brand with selected and existing id while logged in as normal user test "() {
+    def "should not delete brand with selected and existing id while logged in as normal user "() {
         when: "send delete request"
             def addedResponse = addNewBrand()
             def response = ProductDetailsUtils.request.
@@ -167,7 +167,7 @@ class BrandSpec extends Specification {
     }
 
 
-    def "delete brand with selected and existing id while logged in as admin test"() {
+    def "should delete brand with selected and existing id while logged in as admin"() {
         when: "send delete request"
             def addedResponse = addNewBrand()
             def response = ProductDetailsUtils.request.

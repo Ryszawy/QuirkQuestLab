@@ -15,7 +15,7 @@ import static utils.UserAuthenticatorUtils.USER1_PASSWORD
 import static utils.UserAuthenticatorUtils.gson
 
 class FavouritesSpec extends Specification {
-    def "retrieve favourites test"() {
+    def "should retrieve favourites"() {
         when: "send get to retrieve all favourite products"
         def response = ProductDetailsUtils.request.
                 header(UserAuthenticatorUtils.getAuthorizationHeaderForAnyUser(
@@ -30,7 +30,7 @@ class FavouritesSpec extends Specification {
         def favouriteResponse = (ArrayList<FavoriteResponse>) gson.fromJson(jsonBody, List.class)
         favouriteResponse.size() > 0
     }
-    def "retrieve favourites where not logged in test"() {
+    def "should not retrieve favourites where user not logged in "() {
         when: "send get to retrieve all favourite products"
         ProductDetailsUtils.request.get(ProductDetailsUtils.logout)
         def response = ProductDetailsUtils.request.get(AccountUtils.favourites)

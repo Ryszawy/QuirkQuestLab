@@ -14,7 +14,7 @@ class CartSpec extends Specification {
 
 
 
-    def "create cart test"() {
+    def "should create cart "() {
         when: "send request to create cart"
         def response = ProductDetailsUtils.request.post(ProductDetailsUtils.cart)
         then: "should return brands"
@@ -25,7 +25,7 @@ class CartSpec extends Specification {
                 .log().all()
     }
 
-    def "remove cart without id test" () {
+    def "should not remove cart because of wrong id" () {
         when: "send request to remove cart"
         def response = ProductDetailsUtils.request.post(ProductDetailsUtils.cart + "F")
         then: "should remove cart"
