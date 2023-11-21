@@ -1,4 +1,4 @@
-package User
+package API.User
 
 
 import io.restassured.RestAssured
@@ -10,7 +10,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static org.hamcrest.Matchers.is
-import static utils.UserAuthenticatorUtils.*
+import static API.utils.UserAuthenticatorUtils.*
 
 class UserSpec extends Specification {
 

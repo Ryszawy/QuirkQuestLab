@@ -1,4 +1,4 @@
-package utils
+package API.utils
 
 class ContactUtils {
     public static final String messages = "/messages"

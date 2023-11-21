@@ -1,16 +1,16 @@
-package Report
+package API.Report
+
 
 import io.restassured.http.ContentType
 import spock.lang.Specification
-import utils.ReportUtils
 
 import static io.restassured.RestAssured.given
-import static utils.UserAuthenticatorUtils.*
+import static API.utils.UserAuthenticatorUtils.*
 
 class ReportSpec extends Specification {
     def "should return report about total sales per country"() {
         given: "set up request"
-            def request = given(ReportUtils.requestSpec)
+            def request = given(API.utils.ReportUtils.requestSpec)
                     .contentType(ContentType.JSON)
                     .header(getAuthorizationHeaderForAnyUser(ADMIN_EMAIL, ADMIN_PASSWORD))
                     .log().all()
@@ -25,7 +25,7 @@ class ReportSpec extends Specification {
 
     def "should return report about top 10 purchased products"() {
         given: "set up request"
-            def request = given(ReportUtils.requestSpec)
+            def request = given(API.utils.ReportUtils.requestSpec)
                     .contentType(ContentType.JSON)
                     .header(getAuthorizationHeaderForAnyUser(ADMIN_EMAIL, ADMIN_PASSWORD))
                     .log().all()
@@ -40,7 +40,7 @@ class ReportSpec extends Specification {
 
     def "should return report about top 10 best selling categories"() {
         given: "set up request"
-            def request = given(ReportUtils.requestSpec)
+            def request = given(API.utils.ReportUtils.requestSpec)
                     .contentType(ContentType.JSON)
                     .header(getAuthorizationHeaderForAnyUser(ADMIN_EMAIL, ADMIN_PASSWORD))
                     .log().all()
@@ -55,7 +55,7 @@ class ReportSpec extends Specification {
 
     def "should return report about total sales of years"() {
         given: "set up request"
-            def request = given(ReportUtils.requestSpec)
+            def request = given(API.utils.ReportUtils.requestSpec)
                     .contentType(ContentType.JSON)
                     .header(getAuthorizationHeaderForAnyUser(ADMIN_EMAIL, ADMIN_PASSWORD))
                     .log().all()
@@ -70,7 +70,7 @@ class ReportSpec extends Specification {
 
     def "should return report about average sales per month"() {
         given: "set up request"
-            def request = given(ReportUtils.requestSpec)
+            def request = given(API.utils.ReportUtils.requestSpec)
                     .contentType(ContentType.JSON)
                     .header(getAuthorizationHeaderForAnyUser(ADMIN_EMAIL, ADMIN_PASSWORD))
                     .log().all()
@@ -85,7 +85,7 @@ class ReportSpec extends Specification {
 
     def "should return report about average sales per week"() {
         given: "set up request"
-            def request = given(ReportUtils.requestSpec)
+            def request = given(API.utils.ReportUtils.requestSpec)
                     .contentType(ContentType.JSON)
                     .header(getAuthorizationHeaderForAnyUser(ADMIN_EMAIL, ADMIN_PASSWORD))
                     .log().all()
@@ -100,7 +100,7 @@ class ReportSpec extends Specification {
 
     def "should return report about customers by country"() {
         given: "set up request"
-            def request = given(ReportUtils.requestSpec)
+            def request = given(API.utils.ReportUtils.requestSpec)
                     .contentType(ContentType.JSON)
                     .queryParam("country", "Austria")
                     .header(getAuthorizationHeaderForAnyUser(ADMIN_EMAIL, ADMIN_PASSWORD))

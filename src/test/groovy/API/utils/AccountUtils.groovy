@@ -1,4 +1,4 @@
-package utils
+package API.utils
 
 class AccountUtils {
     public static final String favourites = "/favorites"

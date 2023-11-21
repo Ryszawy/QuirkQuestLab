@@ -1,4 +1,4 @@
-package utils
+package API.utils
 
 class RequestUtils {
     public static final String contentType = "Content-Type"
