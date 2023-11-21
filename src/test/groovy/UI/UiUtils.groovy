@@ -42,6 +42,20 @@ class UiUtils extends Specification {
         registerUser(userEmail, userPassword)
     }
 
+    void getHomePageAsLoggedUser() {
+        registerUser(userEmail, userPassword)
+        loginUser(userEmail, userPassword)
+    }
+
+    private void loginUser(String userEmail, String userPassword) {
+        registerRandomUser()
+        driver.findElement(By.xpath("//*[@id='email']")).sendKeys(userEmail)
+        driver.findElement(By.xpath("//*[@id='password']")).sendKeys(userPassword)
+        driver.findElement(By.xpath("//input[@type='submit']")).click()
+        new WebDriverWait(driver, 3).until(ExpectedConditions.urlToBe(USER_ACCOUNT_URL))
+        driver.get(HOME_URL)
+    }
+
     private void registerUser(String email, String password) {
         def xpathSignInButton = By.xpath("//*[@id=\"navbarSupportedContent\"]/ul/li[4]/a")
         def xpathRegister = By.xpath("//a[@href='#/auth/register']")
