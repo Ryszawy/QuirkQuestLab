@@ -1,4 +1,4 @@
-package UI
+package UI.utils
 
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
@@ -12,10 +12,12 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import java.util.concurrent.TimeUnit
 
 class UiUtils extends Specification {
-    public static String HOME_URL = "https://practicesoftwaretesting.com/#/"
-    public static String USER_ACCOUNT_URL = "https://practicesoftwaretesting.com/#/account"
+    public static final String HOME_URL = "https://practicesoftwaretesting.com/#/"
+    public static final String USER_ACCOUNT_URL = "https://practicesoftwaretesting.com/#/account"
+    public static final String CART_URL = "https://practicesoftwaretesting.com/#/checkout"
+    public static final int TIMEOUT = 5
     public static String LOGIN_URL = "https://practicesoftwaretesting.com/#/auth/login"
-    public static final  int TIMEOUT = 5
+
 
     @Shared
     public static String userEmail
@@ -56,10 +58,49 @@ class UiUtils extends Specification {
         loginUser("admin@practicesoftwaretesting.com", "welcome01")
     }
 
+    void getCart() {
+        driver.get(CART_URL)
+    }
+
+    String addToCart() {
+        def name = getAvailableProductFromHomePage()
+        def addToCartBtn = driver.findElement(By.xpath("//*[@id=\"btn-add-to-cart\"]"))
+        addToCartBtn.click()
+        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='toast-body']")))
+        return name
+    }
+
     String getProductFromHomePage() {
         driver.get(HOME_URL)
         def randomProductOnFirstPage = By.cssSelector("body > app-root > div > app-overview > div:nth-child(3) > div.col-md-9 > div.container > a:nth-child(1)")
         def randomElementName = driver.findElement(randomProductOnFirstPage)
+        randomElementName.click()
+        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.urlContains("https://practicesoftwaretesting.com/#/product"))
+        driver.findElement(By.xpath("/html/body/app-root/div/app-detail/div[1]/div[2]/h1")).getText()
+    }
+
+    String getAvailableProductFromHomePage() {
+        driver.get(HOME_URL)
+        def product = null
+        for (int i = 1; i <= 9; i++) {
+            def getProductInfo = driver.findElement(By.cssSelector("body > app-root > div > app-overview > div:nth-child(3) > div.col-md-9 > div.container > a:nth-child($i) > div.card-footer"))
+            if (!getProductInfo.getText().contains("Out of stock")) {
+                product = By.cssSelector("body > app-root > div > app-overview > div:nth-child(3) > div.col-md-9 > div.container > a:nth-child($i)")
+                break
+            }
+        }
+        if (product == null) {
+            def nextPageBtn = driver.findElement(By.xpath("/html/body/app-root/div/app-overview/div[3]/div[2]/div[2]/app-pagination/nav/ul/li[5]/a"))
+            if (!nextPageBtn.getAttribute("class").contains("disabled")) {
+                throw new NoSuchElementException("There are no available products")
+            }
+            nextPageBtn.click()
+            Thread.sleep(TIMEOUT / 5 * 1000 as long)
+            getAvailableProductFromHomePage()
+        }
+
+        def randomElementName = driver.findElement(product)
+
         randomElementName.click()
         new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.urlContains("https://practicesoftwaretesting.com/#/product"))
         driver.findElement(By.xpath("/html/body/app-root/div/app-detail/div[1]/div[2]/h1")).getText()
@@ -70,6 +111,7 @@ class UiUtils extends Specification {
         driver.findElement(By.xpath("//*[@id='email']")).sendKeys(userEmail)
         driver.findElement(By.xpath("//*[@id='password']")).sendKeys(userPassword)
         driver.findElement(By.xpath("//input[@type='submit']")).click()
+        Thread.sleep((TIMEOUT / 5) * 1000 as long)
         driver.get(HOME_URL)
     }
 
@@ -91,7 +133,7 @@ class UiUtils extends Specification {
 
         driver.findElement(By.xpath("//*[@id='address']")).sendKeys("address")
         driver.findElement(By.xpath("//*[@id='postcode']")).sendKeys("21-370")
-        driver.findElement(By.xpath("//*[@id='city']")).sendKeys("Lodz")
+        driver.findElement(By.xpath("//*[@id='city']")).sendKeys("Warsaw")
         driver.findElement(By.xpath("//*[@id='state']")).sendKeys("state")
 
         def element = driver.findElement(By.cssSelector("select[id='country']"))

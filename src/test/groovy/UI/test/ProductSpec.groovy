@@ -1,11 +1,13 @@
-package UI
+package UI.test
 
+import UI.utils.UiUtils
 import org.openqa.selenium.By
+import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 
-class ProductTestSpec extends UiUtils{
-    def 'should add random product to favorites' () {
+class ProductSpec extends UiUtils{
+    def 'C1 - should add random product to favorites' () {
         given:
             getHomePageAsLoggedUser()
             def productName = getProductFromHomePage()
@@ -22,7 +24,7 @@ class ProductTestSpec extends UiUtils{
 
     }
 
-    def 'should remove product from favorites' () {
+    def 'C2 - should remove product from favorites' () {
         given:
             getHomePageAsLoggedUser()
             def productName = getProductFromHomePage()
@@ -43,23 +45,35 @@ class ProductTestSpec extends UiUtils{
             new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(favouriteProductElement.get()))
     }
 
-    def 'should remove product' () {
+    def 'C4 - should remove product'() {
         given:
-            getHomePageAsAdmin()
-            synchronized (driver) {
-                driver.wait(1000)
+        getHomePageAsAdmin()
+        synchronized (driver) {
+            driver.wait(1000)
+        }
+        def productsList = By.xpath("/html/body/app-root/div/app-products-list/table/tbody")
+        when:
+        driver.get("https://practicesoftwaretesting.com/#/admin/products")
+        def products = driver.findElement(productsList).findElements(By.tagName("tr"))
+                .stream().filter {
+            it.findElements(By.tagName("td"))
+                    .get(2).getText().toInteger() > 0
+        }.toList()
+        then:
+        boolean shouldBreak = false
+        while(shouldBreak){
+            products.each {
+                def passed = false
+                try {
+                    it.findElement(By.cssSelector("button.btn.btn-sm.btn-danger")).click()
+                    passed = new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(it))
+                } catch (TimeoutException e) {
+
+                }
+                if (passed) {
+                    shouldBreak = true
+                }
             }
-            def productsList = By.xpath("/html/body/app-root/div/app-products-list/table/tbody")
-        when:
-            driver.get("https://practicesoftwaretesting.com/#/admin/products")
-            def product = driver.findElement(productsList).findElements(By.tagName("tr"))
-                    .stream().filter{it.findElements(By.tagName("td"))
-                    .get(2).getText().toInteger() > 0}.findFirst()
-        then:
-            product.isPresent()
-        when:
-            product.get().findElement(By.cssSelector("button.btn.btn-sm.btn-danger")).click()
-        then:
-            new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(product.get()))
+        }
     }
 }

@@ -1,5 +1,6 @@
-package UI
+package UI.test
 
+import UI.utils.UiUtils
 import com.github.javafaker.Faker
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
@@ -34,7 +35,7 @@ class ContactFormSpec extends UiUtils{
         messageText = faker.lorem().characters(51, 249)
     }
 
-    def 'should fill form and send it' () {
+    def 'C3 - should fill form and send it' () {
         given:
             def firstNameInput = By.xpath("//*[@id=\"first_name\"]")
             def lastNameInput = By.xpath("//*[@id=\"last_name\"]")
