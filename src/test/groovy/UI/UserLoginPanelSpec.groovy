@@ -27,7 +27,7 @@ class UserLoginPanelSpec extends UiUtils {
 
             driver.findElement(By.xpath("//*[@id='address']")).sendKeys("address")
             driver.findElement(By.xpath("//*[@id='postcode']")).sendKeys("21-370")
-            driver.findElement(By.xpath("//*[@id='city']")).sendKeys("Lodz")
+            driver.findElement(By.xpath("//*[@id='city']")).sendKeys("Warsaw")
             driver.findElement(By.xpath("//*[@id='state']")).sendKeys("state")
             def element = driver.findElement(By.cssSelector("select[id='country']"))
 
