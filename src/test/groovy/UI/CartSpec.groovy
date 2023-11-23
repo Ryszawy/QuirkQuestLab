@@ -2,11 +2,7 @@ package UI
 
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
-import org.openqa.selenium.support.ui.Sleeper
-import org.openqa.selenium.support.ui.WebDriverWait
 
 import java.time.Duration
 
@@ -30,7 +26,7 @@ class CartSpec extends UiUtils {
             def selectedProduct = products.stream().filter { it.getText().contains(name) }.findFirst()
             def removeBtn = selectedProduct.get().findElement(By.xpath("//i[@class='fa fa-remove']"))
             removeBtn.click()
-            Thread.sleep(Duration.ofSeconds(TIMEOUT / 2 as long))
+            Thread.sleep((TIMEOUT / 2 as long) * 1000)
             products = driver.findElements(By.xpath("/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-step[1]/div/table"))
         then: "product has been removed from cart"
             !products.stream().anyMatch { it.getText().contains(name) }
@@ -51,14 +47,15 @@ class CartSpec extends UiUtils {
             quantity.clear()
             quantity.sendKeys(number.toString())
             quantity.sendKeys(Keys.TAB)
-            Thread.sleep(Duration.ofSeconds(TIMEOUT / 5 as long))
+            Thread.sleep((TIMEOUT / 5 as long) * 1000)
             def updatedPrice = selectedProduct.get().findElement(By.cssSelector("body > app-root > div > app-checkout > aw-wizard > div > aw-wizard-step:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > span"))
             updatedPrice = updatedPrice.getText().toString().replace('$', "")
             updatedPrice = updatedPrice as double
         then: "price has been updated"
             updatedPrice == price * number
     }
-    def 'order product' () {
+
+    def 'order product'() {
         given: "log and add products to cart"
             getHomePageAsLoggedUser()
             addToCart()
@@ -66,10 +63,10 @@ class CartSpec extends UiUtils {
             getCart()
             def proceedBtn = driver.findElement(By.xpath("/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-step[1]/div/div/button"))
             proceedBtn.click()
-            Thread.sleep(Duration.ofSeconds(TIMEOUT / 5 as long))
+            Thread.sleep((TIMEOUT / 5 as long) * 1000)
             proceedBtn = driver.findElement(By.xpath("/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-step[2]/div/div/div/div/button"))
             proceedBtn.click()
-            Thread.sleep(Duration.ofSeconds(TIMEOUT / 5 as long))
+            Thread.sleep((TIMEOUT / 5 as long) * 1000)
             proceedBtn = driver.findElement(By.xpath("/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-step[3]/div/div/div/div/button"))
             proceedBtn.click()
             def confirmBtn = driver.findElement(By.xpath("/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-completion-step/div/div/div/div/button"))
@@ -81,7 +78,7 @@ class CartSpec extends UiUtils {
             accountName.sendKeys("aaaa")
             accountNumber.sendKeys("1234")
             confirmBtn.click()
-            Thread.sleep(TIMEOUT /5 as Long)
+            Thread.sleep(TIMEOUT / 5 as Long)
             def orderResult = driver.findElement(By.xpath("/html/body/app-root/div/app-checkout/aw-wizard/div/aw-wizard-completion-step/div/div/div/form/div[4]/div"))
         then: "check if product has been ordered"
             orderResult.getText() == "Payment was successful"
