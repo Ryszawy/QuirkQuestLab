@@ -29,13 +29,12 @@ class UserLoginPanelSpec extends UiUtils {
             driver.findElement(By.xpath("//*[@id='postcode']")).sendKeys("21-370")
             driver.findElement(By.xpath("//*[@id='city']")).sendKeys("Lodz")
             driver.findElement(By.xpath("//*[@id='state']")).sendKeys("state")
-
             def element = driver.findElement(By.cssSelector("select[id='country']"))
 
             def selectCountry = new Select(element)
             selectCountry.selectByVisibleText("Poland")
             driver.findElement(By.xpath("//*[@id='phone']")).sendKeys("123123123")
-            driver.findElement(By.xpath("//*[@id='email']")).sendKeys("email@email.com")
+            driver.findElement(By.xpath("//*[@id='email']")).sendKeys("${UUID.randomUUID().toString()}@email.com")
             driver.findElement(By.xpath("//*[@id='password']")).sendKeys("password")
         and: 'submit registration'
             driver.findElement(By.xpath("//button[@type='submit']")).click()

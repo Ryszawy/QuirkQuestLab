@@ -2,13 +2,13 @@ package UI
 
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.safari.SafariDriver
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
 import spock.lang.Shared
 import spock.lang.Specification
-
+import io.github.bonigarcia.wdm.WebDriverManager;
 import java.util.concurrent.TimeUnit
 
 class UiUtils extends Specification {
@@ -25,7 +25,8 @@ class UiUtils extends Specification {
     public WebDriver driver
 
     def setup() {
-        driver = new SafariDriver()
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver()
         driver.manage().window().maximize()
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS)
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS)
@@ -43,7 +44,6 @@ class UiUtils extends Specification {
     }
 
     void getHomePageAsLoggedUser() {
-        registerUser(userEmail, userPassword)
         loginUser(userEmail, userPassword)
     }
 
