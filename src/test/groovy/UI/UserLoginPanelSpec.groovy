@@ -14,10 +14,10 @@ class UserLoginPanelSpec extends UiUtils {
         when:
             driver.findElement(xpathSignInButton).click()
         then: 'should open registration panel'
-            new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-6 auth-form']")))
+            new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-6 auth-form']")))
         when: 'fill brackets with data'
             driver.findElement(xpathRegister).click()
-            new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-8 auth-form']")))
+            new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-8 auth-form']")))
             driver.findElement(By.xpath("//*[@id='first_name']")).sendKeys("firstName")
             driver.findElement(By.xpath("//*[@id='last_name']")).sendKeys("lastName")
 
@@ -39,7 +39,7 @@ class UserLoginPanelSpec extends UiUtils {
         and: 'submit registration'
             driver.findElement(By.xpath("//button[@type='submit']")).click()
         then: 'should register user and back to login panel'
-            new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-6 auth-form']")))
+            new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-6 auth-form']")))
     }
 
     def 'should login user'() {
@@ -50,6 +50,6 @@ class UserLoginPanelSpec extends UiUtils {
             driver.findElement(By.xpath("//*[@id='password']")).sendKeys(userPassword)
             driver.findElement(By.xpath("//input[@type='submit']")).click()
         then: 'should be logged in and move us to user account panel'
-            new WebDriverWait(driver, 3).until(ExpectedConditions.urlToBe(USER_ACCOUNT_URL))
+            new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.urlToBe(USER_ACCOUNT_URL))
     }
 }

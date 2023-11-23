@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 class UiUtils extends Specification {
     public static String HOME_URL = "https://practicesoftwaretesting.com/#/"
     public static String USER_ACCOUNT_URL = "https://practicesoftwaretesting.com/#/account"
+    public static final  int TIMEOUT = 5
 
     @Shared
     public static String userEmail
@@ -23,6 +24,7 @@ class UiUtils extends Specification {
 
     @Shared
     public WebDriver driver
+
 
     def setup() {
         WebDriverManager.chromedriver().setup();
@@ -47,12 +49,22 @@ class UiUtils extends Specification {
         loginUser(userEmail, userPassword)
     }
 
+    String getProductFromHomePage() {
+        driver.get(HOME_URL)
+        def randomProductOnFirstPage = By.cssSelector("body > app-root > div > app-overview > div:nth-child(3) > div.col-md-9 > div.container > a:nth-child(1)")
+        def randomElementName = driver.findElement(randomProductOnFirstPage)
+        randomElementName.click()
+        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.urlContains("https://practicesoftwaretesting.com/#/product"))
+        driver.findElement(By.xpath("/html/body/app-root/div/app-detail/div[1]/div[2]/h1")).getText()
+    }
+
+
     private void loginUser(String userEmail, String userPassword) {
         registerRandomUser()
         driver.findElement(By.xpath("//*[@id='email']")).sendKeys(userEmail)
         driver.findElement(By.xpath("//*[@id='password']")).sendKeys(userPassword)
         driver.findElement(By.xpath("//input[@type='submit']")).click()
-        new WebDriverWait(driver, 3).until(ExpectedConditions.urlToBe(USER_ACCOUNT_URL))
+        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.urlToBe(USER_ACCOUNT_URL))
         driver.get(HOME_URL)
     }
 
@@ -61,10 +73,10 @@ class UiUtils extends Specification {
         def xpathRegister = By.xpath("//a[@href='#/auth/register']")
 
         driver.findElement(xpathSignInButton).click()
-        new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-6 auth-form']")))
+        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-6 auth-form']")))
 
         driver.findElement(xpathRegister).click()
-        new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-8 auth-form']")))
+        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-8 auth-form']")))
         driver.findElement(By.xpath("//*[@id='first_name']")).sendKeys("firstName")
         driver.findElement(By.xpath("//*[@id='last_name']")).sendKeys("lastName")
 
@@ -86,6 +98,6 @@ class UiUtils extends Specification {
         driver.findElement(By.xpath("//*[@id='password']")).sendKeys(password)
 
         driver.findElement(By.xpath("//button[@type='submit']")).click()
-        new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-6 auth-form']")))
+        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='col-lg-6 auth-form']")))
     }
 }
