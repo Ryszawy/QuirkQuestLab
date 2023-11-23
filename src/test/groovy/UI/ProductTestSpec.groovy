@@ -5,13 +5,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 
 class ProductTestSpec extends UiUtils{
-
-    def setup() {
-        getHomePageAsLoggedUser()
-    }
-
     def 'should add random product to favorites' () {
         given:
+            getHomePageAsLoggedUser()
             def productName = getProductFromHomePage()
             def addToFavouriteBtn = By.xpath("//*[@id=\"btn-add-to-favorites\"]")
             def favouriteURL = "https://practicesoftwaretesting.com/#/account/favorites"
@@ -28,6 +24,7 @@ class ProductTestSpec extends UiUtils{
 
     def 'should remove product from favorites' () {
         given:
+            getHomePageAsLoggedUser()
             def productName = getProductFromHomePage()
             def addToFavouriteBtn = By.xpath("//*[@id=\"btn-add-to-favorites\"]")
             def favouriteURL = "https://practicesoftwaretesting.com/#/account/favorites"
@@ -44,5 +41,25 @@ class ProductTestSpec extends UiUtils{
             favouriteProductElement.get().findElement(By.cssSelector("button.btn-danger.btn.mb-3")).click()
         then: "product is delated"
             new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(favouriteProductElement.get()))
+    }
+
+    def 'should remove product' () {
+        given:
+            getHomePageAsAdmin()
+            synchronized (driver) {
+                driver.wait(1000)
+            }
+            def productsList = By.xpath("/html/body/app-root/div/app-products-list/table/tbody")
+        when:
+            driver.get("https://practicesoftwaretesting.com/#/admin/products")
+            def product = driver.findElement(productsList).findElements(By.tagName("tr"))
+                    .stream().filter{it.findElements(By.tagName("td"))
+                    .get(2).getText().toInteger() > 0}.findFirst()
+        then:
+            product.isPresent()
+        when:
+            product.get().findElement(By.cssSelector("button.btn.btn-sm.btn-danger")).click()
+        then:
+            new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(product.get()))
     }
 }
