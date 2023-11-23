@@ -1,10 +1,11 @@
-package UI
+package UI.test
 
+import UI.utils.UiUtils
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 
-class ProductTestSpec extends UiUtils{
+class ProductSpec extends UiUtils{
     def 'should add random product to favorites' () {
         given:
             getHomePageAsLoggedUser()
@@ -60,6 +61,7 @@ class ProductTestSpec extends UiUtils{
         when:
             product.get().findElement(By.cssSelector("button.btn.btn-sm.btn-danger")).click()
         then:
+            product.get().getText()
             new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(product.get()))
     }
 }

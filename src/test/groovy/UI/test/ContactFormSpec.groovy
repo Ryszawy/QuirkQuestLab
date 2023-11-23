@@ -1,5 +1,6 @@
-package UI
+package UI.test
 
+import UI.utils.UiUtils
 import com.github.javafaker.Faker
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions

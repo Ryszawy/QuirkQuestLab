@@ -1,10 +1,9 @@
-package UI
+package UI.test
 
+import UI.utils.UiUtils
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import org.openqa.selenium.support.ui.Select
-
-import java.time.Duration
 
 class CartSpec extends UiUtils {
     def 'should add product to cart'() {
