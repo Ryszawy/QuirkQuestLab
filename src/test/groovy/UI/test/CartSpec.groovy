@@ -6,7 +6,7 @@ import org.openqa.selenium.Keys
 import org.openqa.selenium.support.ui.Select
 
 class CartSpec extends UiUtils {
-    def 'should add product to cart'() {
+    def ' A1 - should add product to cart'() {
         given: "add product to cart"
             def name = addToCart()
         when: "go to cart"
@@ -16,7 +16,7 @@ class CartSpec extends UiUtils {
             products.stream().anyMatch { it.getText().contains(name) }
     }
 
-    def 'remove item from cart'() {
+    def 'A2 - should remove item from cart'() {
         given: "add product to cart and proceed to cart"
             def name = addToCart()
             getCart()
@@ -31,7 +31,7 @@ class CartSpec extends UiUtils {
             !products.stream().anyMatch { it.getText().contains(name) }
     }
 
-    def 'change amount in cart'() {
+    def 'A3 - should change amount in cart'() {
         given: "add product to cart and proceed to cart"
             def name = addToCart()
             getCart()
@@ -54,7 +54,7 @@ class CartSpec extends UiUtils {
             updatedPrice == price * number
     }
 
-    def 'order product'() {
+    def 'A4 - should order product'() {
         given: "log and add products to cart"
             getHomePageAsLoggedUser()
             addToCart()

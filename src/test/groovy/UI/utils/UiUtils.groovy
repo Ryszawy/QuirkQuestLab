@@ -95,7 +95,7 @@ class UiUtils extends Specification {
                 throw new NoSuchElementException("There are no available products")
             }
             nextPageBtn.click()
-            Thread.sleep(1000)
+            Thread.sleep(TIMEOUT / 5 * 1000 as long)
             getAvailableProductFromHomePage()
         }
 
@@ -111,6 +111,7 @@ class UiUtils extends Specification {
         driver.findElement(By.xpath("//*[@id='email']")).sendKeys(userEmail)
         driver.findElement(By.xpath("//*[@id='password']")).sendKeys(userPassword)
         driver.findElement(By.xpath("//input[@type='submit']")).click()
+        Thread.sleep((TIMEOUT / 5) * 1000 as long)
         driver.get(HOME_URL)
     }
 
