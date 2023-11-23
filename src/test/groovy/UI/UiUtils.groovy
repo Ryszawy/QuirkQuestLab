@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 class UiUtils extends Specification {
     public static String HOME_URL = "https://practicesoftwaretesting.com/#/"
     public static String USER_ACCOUNT_URL = "https://practicesoftwaretesting.com/#/account"
+    public static String LOGIN_URL = "https://practicesoftwaretesting.com/#/auth/login"
     public static final  int TIMEOUT = 5
 
     @Shared
@@ -46,7 +47,13 @@ class UiUtils extends Specification {
     }
 
     void getHomePageAsLoggedUser() {
+        registerRandomUser()
         loginUser(userEmail, userPassword)
+    }
+
+    void getHomePageAsAdmin() {
+        driver.get(LOGIN_URL)
+        loginUser("admin@practicesoftwaretesting.com", "welcome01")
     }
 
     String getProductFromHomePage() {
@@ -60,11 +67,9 @@ class UiUtils extends Specification {
 
 
     private void loginUser(String userEmail, String userPassword) {
-        registerRandomUser()
         driver.findElement(By.xpath("//*[@id='email']")).sendKeys(userEmail)
         driver.findElement(By.xpath("//*[@id='password']")).sendKeys(userPassword)
         driver.findElement(By.xpath("//input[@type='submit']")).click()
-        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.urlToBe(USER_ACCOUNT_URL))
         driver.get(HOME_URL)
     }
 
