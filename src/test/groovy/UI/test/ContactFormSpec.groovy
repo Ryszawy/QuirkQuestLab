@@ -2,13 +2,16 @@ package UI.test
 
 import UI.utils.UiUtils
 import com.github.javafaker.Faker
+import io.qameta.allure.*
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
 import spock.lang.Shared
 
-class ContactFormSpec extends UiUtils{
+@Epic("UI Tests")
+@Story("Test cases for ContactForm")
+class ContactFormSpec extends UiUtils {
     public static final String CONTACT_URL = "https://practicesoftwaretesting.com/#/contact"
 
     @Shared
@@ -35,8 +38,11 @@ class ContactFormSpec extends UiUtils{
         messageText = faker.lorem().characters(51, 249)
     }
 
-    def 'C3 - should fill form and send it' () {
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Test Description: should fill form and send it")
+    def 'C3 - should fill form and send it'() {
         given:
+            takeScreenshot()
             def firstNameInput = By.xpath("//*[@id=\"first_name\"]")
             def lastNameInput = By.xpath("//*[@id=\"last_name\"]")
             def emailInput = By.xpath("//*[@id=\"email\"]")
@@ -51,9 +57,11 @@ class ContactFormSpec extends UiUtils{
             def selectedSubject = new Select(submitElement)
             selectedSubject.selectByVisibleText("Return")
             driver.findElement(message).sendKeys(messageText)
+            takeScreenshot()
         then: "click button to send form"
             driver.findElement(sendBtn).click()
         and: "correct form send message should be visible"
             new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app-root/div/app-contact/div/div/div/div")))
+            takeScreenshot()
     }
 }

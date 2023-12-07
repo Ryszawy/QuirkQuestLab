@@ -1,0 +1,28 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="REST Assured test examples">
+    <listeners>
+        <listener class-name="io.qameta.allure.listener.LifecycleNotifier"/>
+    </listeners>
+    <test name="API">
+        <classes>
+            <class name="API.test.Account.FavouritesSpec"/>
+            <class name="API.test.Account.InvoicesSpec"/>
+            <class name="API.test.Contact.ContactSpec"/>
+            <class name="API.test.Details.BrandSpec"/>
+            <class name="API.test.Details.CategoriesSpec"/>
+            <class name="API.test.Products.CartSpec"/>
+            <class name="API.test.Products.ProductSpec"/>
+            <class name="API.test.Report.ReportSpec"/>
+            <class name="API.test.User.UserSpec"/>
+            <class name="API.test.User.UserSpec"/>
+        </classes>
+    </test>
+    <test name="UI">
+        <classes>
+            <class name="UI.test.CartSpec"/>
+            <class name="UI.test.ContactFormSpec"/>
+            <class name="UI.test.ProductSpec"/>
+            <class name="UI.test.UserLoginPanelSpec"/>
+        </classes>
+    </test>
+</suite>

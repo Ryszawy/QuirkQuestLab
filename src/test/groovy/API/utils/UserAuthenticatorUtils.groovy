@@ -1,6 +1,8 @@
 package API.utils
 
 import com.google.gson.Gson
+import io.qameta.allure.Allure
+import io.qameta.allure.restassured.AllureRestAssured
 import io.restassured.RestAssured
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.http.ContentType
@@ -28,16 +30,14 @@ class UserAuthenticatorUtils {
         new Header("Authorization", response.getTokenType() + response.getAccessToken())
     }
 
-    static UserResponse createNewUser(UserRequest userRequest) {
-        def authHeader = getAuthorizationHeaderForAnyUser(ADMIN_EMAIL, ADMIN_PASSWORD)
+    static UserResponse createNewUser(UserRequest userRequest, Header authHeader) {
         def addNewUserRequest = RestAssured.given(requestSpec)
                 .contentType(ContentType.JSON)
                 .body(gson.toJson(userRequest))
                 .header(authHeader)
-                .log().all()
+                .filter(new AllureRestAssured())
         def responseUserCreation = addNewUserRequest.post("/register")
         responseUserCreation.then()
-                .log().all()
                 .statusCode(201)
         gson.fromJson(responseUserCreation.getBody().prettyPrint(), UserResponse.class)
     }
@@ -69,12 +69,11 @@ class UserAuthenticatorUtils {
         def request = RestAssured.given(requestSpec)
                 .body(requestBody)
                 .contentType(ContentType.JSON)
-                .log().all()
 
         def response = request.post("/login")
 
         response.then()
-                .log().all()
+
                 .statusCode(200)
 
         def string = response.body().prettyPrint()

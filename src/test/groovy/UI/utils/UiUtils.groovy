@@ -1,6 +1,10 @@
 package UI.utils
 
+import io.github.bonigarcia.wdm.WebDriverManager
+import io.qameta.allure.Attachment
 import org.openqa.selenium.By
+import org.openqa.selenium.OutputType
+import org.openqa.selenium.TakesScreenshot
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
@@ -8,7 +12,7 @@ import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
 import spock.lang.Shared
 import spock.lang.Specification
-import io.github.bonigarcia.wdm.WebDriverManager;
+
 import java.util.concurrent.TimeUnit
 
 class UiUtils extends Specification {
@@ -68,6 +72,11 @@ class UiUtils extends Specification {
         addToCartBtn.click()
         new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='toast-body']")))
         return name
+    }
+
+    @Attachment(value = "Web page screenshot", type = "image/png")
+    public byte[] takeScreenshot() {
+        ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)
     }
 
     String getProductFromHomePage() {

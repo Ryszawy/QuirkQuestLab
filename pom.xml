@@ -14,16 +14,15 @@
         <maven.compiler.version>3.8</maven.compiler.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium.version>3.9.1</selenium.version>
-        <testng.version>6.14.3</testng.version>
+        <testng.version>7.3.0</testng.version>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <gmavenplus-plugin.version>1.11.0</gmavenplus-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M2</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <swagger-codegen-maven-plugin.version>3.0.35</swagger-codegen-maven-plugin.version>
         <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
-        <groovy-all.version>2.4.7</groovy-all.version>
-        <spock-core.version>1.0-groovy-2.4</spock-core.version>
+        <spock-core.version>2.0-M5-groovy-3.0</spock-core.version>
         <hamcrest.version>1.3</hamcrest.version>
         <jackson.core.version>2.15.3</jackson.core.version>
         <rest-assured.version>3.3.0</rest-assured.version>
@@ -34,6 +33,7 @@
         <swagger-annotations.version>2.2.15</swagger-annotations.version>
         <javax.annotation.version>1.3.2</javax.annotation.version>
         <immutables.version>2.9.3</immutables.version>
+        <aspectj.version>1.9.5</aspectj.version>
     </properties>
 
     <dependencies>
@@ -41,12 +41,6 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
@@ -90,8 +84,8 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>${rest-assured.version}</version>
-            <scope>test</scope>
+            <version>4.5.1</version>
+<!--            <scope>test</scope>-->
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -109,17 +103,18 @@
             <artifactId>value</artifactId>
             <version>${immutables.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
-            <version>${spock-core.version}</version>
+            <version>2.4-M1-groovy-3.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>${groovy-all.version}</version>
-            <scope>test</scope>
+            <version>3.0.18</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
@@ -131,132 +126,195 @@
             <artifactId>javafaker</artifactId>
             <version>1.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
+            <version>2.23.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-spock2</artifactId>
+            <version>2.23.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gebish</groupId>
+            <artifactId>geb-spock</artifactId>
+            <version>4.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-commons</artifactId>
+            <version>1.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-engine</artifactId>
+            <version>1.10.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-    <profiles>
-        <profile>
-            <id>default-profile</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-dependency-plugin</artifactId>
-                            <executions>
-                                <execution>
-                                    <phase>package</phase>
-                                    <goals>
-                                        <goal>copy-dependencies</goal>
-                                    </goals>
-                                    <configuration>
-                                        <outputDirectory>${project.build.directory}/lib
-                                        </outputDirectory>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-jar-plugin</artifactId>
-                            <version>${maven-jar-plugin.version}</version>
-                            <configuration>
-                                <archive>
-                                    <manifest>
-                                        <addClasspath>true</addClasspath>
-                                        <classpathPrefix>lib/</classpathPrefix>
-                                    </manifest>
-                                </archive>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-source-plugin</artifactId>
-                            <version>${maven-source-plugin.version}</version>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.gmavenplus</groupId>
-                        <artifactId>gmavenplus-plugin</artifactId>
-                        <version>${gmavenplus-plugin.version}</version>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!-- The gmavenplus plugin is used to compile Groovy code. To learn more about this plugin,
+                visit https://github.com/groovy/GMavenPlus/wiki -->
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <targetBytecode>1.8</targetBytecode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>addSources</goal>
+                            <goal>addTestSources</goal>
+                            <goal>compile</goal>
+                            <goal>compileTests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
                         <configuration>
-                            <targetBytecode>1.8</targetBytecode>
+                            <outputDirectory>${project.build.directory}/lib
+                            </outputDirectory>
                         </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>compileTests</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${maven-surefire-plugin.version}</version>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-api</artifactId>
+                        <version>3.0.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.10.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <useFile>false</useFile>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                    <includes>
+                        <include>**/*Spec.groovy</include>
+                        <include>**/*Spec.java</include>
+                        <include>**/*Test.groovy</include>
+                        <include>**/*Test.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <release>17</release>
+                    <encoding>UTF-8</encoding>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.immutables</groupId>
+                            <artifactId>value</artifactId>
+                            <version>${maven-project-info-reports-plugin.version}.3</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.swagger.codegen.v3</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>${swagger-codegen-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
                         <configuration>
-                            <useFile>false</useFile>
-                            <includes>
-                                <include>**/*Spec.groovy</include>
-                                <include>**/*Spec.java</include>
-                                <include>**/*Test.java</include>
-                            </includes>
-                            <systemProperties>
-                                <com.athaydes.spockframework.report.showCodeBlocks>true
-                                </com.athaydes.spockframework.report.showCodeBlocks>
-                                <com.athaydes.spockframework.report.outputDir>${project.build.directory}/spock-reports
-                                </com.athaydes.spockframework.report.outputDir>
-                            </systemProperties>
+                            <inputSpec>src/main/resources/api/openapi.yaml</inputSpec>
+                            <language>java</language>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <configOptions>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                            </configOptions>
+                            <modelPackage>model</modelPackage>
+                            <apiPackage>model.api</apiPackage>
                         </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven-compiler-plugin.version}</version>
-                        <configuration>
-                            <release>17</release>
-                            <encoding>UTF-8</encoding>
-                            <forceJavacCompilerUse>true</forceJavacCompilerUse>
-                            <annotationProcessorPaths>
-                                <path>
-                                    <groupId>org.immutables</groupId>
-                                    <artifactId>value</artifactId>
-                                    <version>${maven-project-info-reports-plugin.version}.3</version>
-                                </path>
-                            </annotationProcessorPaths>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-project-info-reports-plugin</artifactId>
-                        <version>${maven-project-info-reports-plugin.version}</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>io.swagger.codegen.v3</groupId>
-                        <artifactId>swagger-codegen-maven-plugin</artifactId>
-                        <version>${swagger-codegen-maven-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>generate</goal>
-                                </goals>
-                                <configuration>
-                                    <inputSpec>src/main/resources/api/openapi.yaml</inputSpec>
-                                    <language>java</language>
-                                    <generateApiTests>false</generateApiTests>
-                                    <generateModelTests>false</generateModelTests>
-                                    <configOptions>
-                                        <sourceFolder>src/gen/java/main</sourceFolder>
-                                    </configOptions>
-                                    <modelPackage>model</modelPackage>
-                                    <apiPackage>model.api</apiPackage>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.10.0</version>
+                <configuration>
+                    <reportVersion>2.23.0</reportVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
