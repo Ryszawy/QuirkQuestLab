@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
 import spock.lang.Shared
 
-@Epic("UI Tests")
+@Epic("UI TESTS")
 @Story("Test cases for ContactForm")
 class ContactFormSpec extends UiUtils {
     public static final String CONTACT_URL = "https://practicesoftwaretesting.com/#/contact"

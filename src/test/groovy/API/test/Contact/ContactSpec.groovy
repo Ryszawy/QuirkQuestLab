@@ -19,7 +19,7 @@ import static API.utils.UserAuthenticatorUtils.*
 import static io.restassured.RestAssured.given
 import static io.restassured.http.ContentType.JSON
 
-@Epic("REST API Tests")
+@Epic("REST API TESTS")
 @Story("Verify CRUID Operations on Contact module")
 class ContactSpec extends Specification {
     def setup() {

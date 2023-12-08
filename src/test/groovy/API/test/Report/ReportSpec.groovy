@@ -9,7 +9,7 @@ import static API.utils.ReportUtils.requestSpec
 import static API.utils.UserAuthenticatorUtils.*
 import static io.restassured.RestAssured.given
 
-@Epic("REST API Tests")
+@Epic("REST API TESTS")
 @Story("Verify CRUID Operations on Report module")
 class ReportSpec extends Specification {
 

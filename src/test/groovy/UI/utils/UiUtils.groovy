@@ -75,7 +75,7 @@ class UiUtils extends Specification {
     }
 
     @Attachment(value = "Web page screenshot", type = "image/png")
-    public byte[] takeScreenshot() {
+    byte[] takeScreenshot() {
         ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)
     }
 

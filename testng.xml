@@ -25,4 +25,9 @@
             <class name="UI.test.UserLoginPanelSpec"/>
         </classes>
     </test>
+    <test name="BDD">
+        <classes>
+            <class name="BDD.CucumberTestsRunner"/>
+        </classes>
+    </test>
 </suite>

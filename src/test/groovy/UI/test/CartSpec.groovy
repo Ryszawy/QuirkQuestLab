@@ -1,16 +1,12 @@
 package UI.test
 
 import UI.utils.UiUtils
-import io.qameta.allure.Description
-import io.qameta.allure.Epic
-import io.qameta.allure.Severity
-import io.qameta.allure.SeverityLevel
-import io.qameta.allure.Story
+import io.qameta.allure.*
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import org.openqa.selenium.support.ui.Select
 
-@Epic("UI Tests")
+@Epic("UI TESTS")
 @Story("Test cases for Cart")
 class CartSpec extends UiUtils {
     @Severity(SeverityLevel.NORMAL)

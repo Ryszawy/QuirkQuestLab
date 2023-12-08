@@ -7,11 +7,11 @@ import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 
-@Epic("UI Tests")
+@Epic("UI TESTS")
 @Story("Test cases for Product")
 class ProductSpec extends UiUtils {
     @Severity(SeverityLevel.NORMAL)
-    @Description("Test Description: should fill form and send it")
+    @Description("Test Description: should add random product to favorites")
     def 'C1 - should add random product to favorites'() {
         given:
             getHomePageAsLoggedUser()
@@ -33,7 +33,7 @@ class ProductSpec extends UiUtils {
     }
 
     @Severity(SeverityLevel.NORMAL)
-    @Description("Test Description: should fill form and send it")
+    @Description("Test Description: should remove product from favorites")
     def 'C2 - should remove product from favorites'() {
         given:
             getHomePageAsLoggedUser()
@@ -60,7 +60,7 @@ class ProductSpec extends UiUtils {
     }
 
     @Severity(SeverityLevel.NORMAL)
-    @Description("Test Description: should fill form and send it")
+    @Description("Test Description: should remove product")
     def 'C4 - should remove product'() {
         given:
             getHomePageAsAdmin()

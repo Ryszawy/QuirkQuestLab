@@ -12,7 +12,7 @@ import static API.utils.ProductDetailsUtils.*
 import static API.utils.RequestUtils.*
 import static io.restassured.RestAssured.given
 
-@Epic("REST API Tests")
+@Epic("REST API TESTS")
 @Story("Verify CRUID Operations on Products module")
 class CartSpec extends Specification {
 

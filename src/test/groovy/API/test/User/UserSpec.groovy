@@ -14,7 +14,7 @@ import static API.utils.UserAuthenticatorUtils.*
 import static io.restassured.RestAssured.given
 import static org.hamcrest.Matchers.is
 
-@Epic("REST API Tests")
+@Epic("REST API TESTS")
 @Story("Verify CRUID Operations on User module")
 class UserSpec extends Specification {
 

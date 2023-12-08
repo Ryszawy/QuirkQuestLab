@@ -1,1 +1,0 @@
-{"total":2,"items":[{"uid":"96fdf27e1d3e9170f5a2874c832debc1","name":"REST API Tests","statistic":{"failed":1,"broken":1,"skipped":0,"passed":4,"unknown":0,"total":6}},{"uid":"9d55992b7a44eab4c22dbc2c42e2c602","name":"UI Tests","statistic":{"failed":0,"broken":0,"skipped":0,"passed":4,"unknown":0,"total":4}}]}

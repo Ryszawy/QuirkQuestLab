@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
 
-@Epic("UI Tests")
+@Epic("UI TESTS")
 @Story("Test cases for User Panel")
 class UserLoginPanelSpec extends UiUtils {
 

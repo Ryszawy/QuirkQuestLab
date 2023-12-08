@@ -14,7 +14,7 @@ import static API.utils.RequestUtils.*
 import static API.utils.UserAuthenticatorUtils.*
 import static io.restassured.RestAssured.given
 
-@Epic("REST API Tests")
+@Epic("REST API TESTS")
 @Story("Verify CRUID Operations on Account module")
 class InvoicesSpec extends Specification {
     def setup() {

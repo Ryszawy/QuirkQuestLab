@@ -15,7 +15,7 @@ import static API.utils.RequestUtils.contentType
 import static API.utils.UserAuthenticatorUtils.gson
 import static io.restassured.RestAssured.given
 
-@Epic("REST API Tests")
+@Epic("REST API TESTS")
 @Story("Verify CRUID Operations on Products module")
 class ProductSpec extends Specification {
 
